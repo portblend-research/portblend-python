@@ -1,0 +1,81 @@
+# PortBlend Python SDK (`portblend`)
+
+[![PyPI version](https://img.shields.io/badge/pypi-v0.2.0-blue.svg)](https://pypi.org/project/portblend/)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/portblend-research/portblend-python/blob/main/doc/examples/01_quickstart_portblend.ipynb)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+
+Official Python SDK and Command-Line Interface (`portblend`) for strategy return correlation matrix calculation, SLSQP portfolio weight optimization, and quantitative risk management.
+
+---
+
+## 1. Quickstart — Python SDK Tutorial
+
+### Installation
+```bash
+pip install portblend
+```
+
+### Code Example: Compute Correlation Matrix & Optimize Portfolio Weights
+```python
+from portblend import PortBlendClient
+import pandas as pd
+
+# 1. Initialize PortBlend Client with Developer API Key
+client = PortBlendClient(
+    api_key="pb_live_abcdef1234567890",
+    base_url="https://app.portblend.com/api"  # Or http://localhost:8000/api
+)
+
+# 2. Compute Pairwise Strategy Correlation Matrix
+# Accepts CSV, TSV, Excel file path, pandas.DataFrame, or raw CSV text string
+df_corr = client.correlate(data="path/to/strategy_navs.csv")
+print("Pairwise Return Correlation Matrix:")
+print(df_corr)
+
+# 3. Optimize Portfolio Weights for Protection (min_drawdown)
+result = client.blend(
+    data="path/to/strategy_navs.csv",
+    target="protection",  # "protection" | "efficiency" | "recovery" | "stability" | "downside_safety"
+    allow_cash=True       # Allow allocation to 0% return synthetic CASH buffer
+)
+
+# 4. Print Educational Quantitative Summary
+result.summary()
+
+# 5. Access Optimal Weights Dictionary
+print("Optimal Weights (%):", result.weights)
+```
+
+---
+
+## 2. Optimization Targets
+
+- `protection` (min_drawdown) — Cuts maximum portfolio loss depth to the absolute minimum.
+- `efficiency` (max_sharpe) — Maximizes overall risk-adjusted return.
+- `recovery` (max_calmar) — Maximizes return relative to maximum peak-to-trough drawdown.
+- `stability` (min_volatility) — Minimizes daily portfolio price swings and variance.
+- `downside_safety` (max_sortino) — Ignores upside gains, penalizing only negative losses.
+
+---
+
+## 3. Quickstart — Command-Line Interface (CLI) Tutorial
+
+### Login & Save API Key
+```bash
+portblend login --key pb_live_abcdef1234567890
+```
+
+### Calculate Strategy Correlation Matrix
+```bash
+portblend correlate --file strategies.csv
+```
+
+### Run Portfolio Weight Optimization
+```bash
+# Target Protection (min_drawdown) with CASH buffer allowed
+portblend optimize --file strategies.csv --target protection
+
+# Target Efficiency (max_sharpe) with 100% strategy allocation (no CASH)
+portblend optimize --file strategies.csv --target efficiency --no-cash
+```

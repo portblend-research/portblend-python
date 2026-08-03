@@ -1,0 +1,2 @@
+[console_scripts]
+portblend = portblend.cli:main

@@ -1,13 +1,13 @@
 Metadata-Version: 2.4
 Name: portblend
-Version: 0.2.1
+Version: 0.2.2
 Summary: Python SDK and CLI for PortBlend strategy correlation matrix calculation, portfolio weight optimization, and drawdown minimization.
 Author-email: PortBlend Research <research@portblend.com>
 License: MIT
 Project-URL: Homepage, https://app.portblend.com
 Project-URL: Documentation, https://app.portblend.com/docs
 Project-URL: Repository, https://github.com/portblend-research/portblend-python
-Keywords: correlation-matrix,portfolio-blending,equity-curve,drawdown-minimization,quant-finance,sharpe-optimization
+Keywords: correlation-matrix,portfolio-blending,equity-curve,drawdown-minimization,quant-finance,sharpe-optimization,ai-agent-tools,llm-tools,nav-analytics,trading-telemetry
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
@@ -62,8 +62,8 @@ print(df_corr)
 # 3. Optimize Portfolio Weights for Protection (min_drawdown)
 result = client.blend(
     data="path/to/strategy_navs.csv",
-    target="protection",  # "protection" | "efficiency" | "recovery" | "stability" | "downside_safety"
-    allow_cash=True       # Allow allocation to 0% return synthetic CASH buffer
+    target="protection",  # "protection" | "efficiency" | "recovery" | "stability" | "downside_safety" | "risk_balance" | "buffered"
+    allow_cash=True       # Allow allocation to synthetic CASH buffer
 )
 
 # 4. Print Educational Quantitative Summary
@@ -82,6 +82,8 @@ print("Optimal Weights (%):", result.weights)
 - `recovery` (max_calmar) — Maximizes return relative to maximum peak-to-trough drawdown.
 - `stability` (min_volatility) — Minimizes daily portfolio price swings and variance.
 - `downside_safety` (max_sortino) — Ignores upside gains, penalizing only negative losses.
+- `risk_balance` (balanced_protection) — Balances drawdown and return dynamically using a scaled utility model.
+- `buffered` (buffered_allocation) — Optimizes strategy blend first, then applies a cash buffer of up to 50%.
 
 ---
 

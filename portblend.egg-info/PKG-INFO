@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: portblend
-Version: 0.2.0
+Version: 0.2.1
 Summary: Python SDK and CLI for PortBlend strategy correlation matrix calculation, portfolio weight optimization, and drawdown minimization.
 Author-email: PortBlend Research <research@portblend.com>
 License: MIT

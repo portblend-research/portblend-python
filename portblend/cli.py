@@ -407,7 +407,7 @@ def handle_examples(args: argparse.Namespace) -> None:
   # 1B. Optimize Portfolio Weights (returns BlendResult object)
   result = client.blend(
       data="strategies.csv",
-      target="min_drawdown",  # "min_drawdown"|"max_sharpe"|"max_calmar"|"min_volatility"|"max_sortino"
+      target="min_drawdown",  # "min_drawdown"|"max_sharpe"|"max_calmar"|"min_volatility"|"max_sortino"|"balanced_protection"|"buffered_allocation"
       allow_cash=True         # Allow synthetic CASH buffer allocation
   )
   result.summary()
@@ -456,6 +456,8 @@ Tips & Target Options:
   - recovery (max_calmar): Maximizes return relative to maximum peak-to-trough drawdown.
   - stability (min_volatility): Minimizes daily portfolio price swings and variance.
   - downside_safety (max_sortino): Ignores upside gains, penalizing only negative losses.
+  - risk_balance (balanced_protection): Balances drawdown and return dynamically.
+  - buffered (buffered_allocation): Optimizes strategy blend first, then applies a cash buffer.
 
 Examples:
   - Run 'portblend optimize --file data.csv --target protection'
@@ -490,14 +492,14 @@ Examples:
     analyze_parser = subparsers.add_parser(
         "analyze",
         aliases=["optimize"],
-        help="Execute portfolio weight optimization across 5 targets (alias: optimize)",
+        help="Execute portfolio weight optimization across 7 targets (alias: optimize)",
     )
     analyze_parser.add_argument("--file", "-f", required=True, help="Path to local NAV CSV, TSV, Excel file, or directory folder")
     analyze_parser.add_argument(
         "--target", "-t",
         default="protection",
-        choices=["protection", "efficiency", "recovery", "stability", "downside_safety"],
-        help="Optimization target: protection (min_drawdown), efficiency (max_sharpe), recovery (max_calmar), stability (min_volatility), downside_safety (max_sortino)"
+        choices=["protection", "efficiency", "recovery", "stability", "downside_safety", "risk_balance", "buffered", "balanced_protection", "buffered_allocation"],
+        help="Optimization target: protection (min_drawdown), efficiency (max_sharpe), recovery (max_calmar), stability (min_volatility), downside_safety (max_sortino), risk_balance (balanced_protection), buffered (buffered_allocation)"
     )
     analyze_parser.add_argument("--no-cash", action="store_true", help="Force 100% strategy allocation (no synthetic CASH buffer)")
     analyze_parser.add_argument("--url", default="https://app.portblend.com/api", help="API base URL")

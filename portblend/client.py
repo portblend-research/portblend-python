@@ -110,11 +110,11 @@ class PortBlendClient:
         rebalance_frequency: str = "monthly",
     ) -> BlendResult:
         """
-        Executes portfolio strategy weight optimization across 5 target choices.
+        Executes portfolio strategy weight optimization across 7 target choices.
 
         Parameters:
             data: Filepath to CSV/Excel, pandas DataFrame, raw string, or payload dict.
-            target: Optimization target ("protection" | "efficiency" | "recovery" | "stability" | "downside_safety").
+            target: Optimization target ("protection" | "efficiency" | "recovery" | "stability" | "downside_safety" | "risk_balance" | "buffered").
             allow_cash: If True (default), sum(w) <= 1.0 (remainder synthetic CASH). If False, 100% invested.
             rebalance_frequency: Rebalance schedule ("monthly" | "weekly" | "quarterly" | "yearly").
 

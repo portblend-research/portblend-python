@@ -36,8 +36,8 @@ print(df_corr)
 # 3. Optimize Portfolio Weights for Protection (min_drawdown)
 result = client.blend(
     data="path/to/strategy_navs.csv",
-    target="protection",  # "protection" | "efficiency" | "recovery" | "stability" | "downside_safety"
-    allow_cash=True       # Allow allocation to 0% return synthetic CASH buffer
+    target="protection",  # "protection" | "efficiency" | "recovery" | "stability" | "downside_safety" | "risk_balance" | "buffered"
+    allow_cash=True       # Allow allocation to synthetic CASH buffer
 )
 
 # 4. Print Educational Quantitative Summary
@@ -56,6 +56,8 @@ print("Optimal Weights (%):", result.weights)
 - `recovery` (max_calmar) — Maximizes return relative to maximum peak-to-trough drawdown.
 - `stability` (min_volatility) — Minimizes daily portfolio price swings and variance.
 - `downside_safety` (max_sortino) — Ignores upside gains, penalizing only negative losses.
+- `risk_balance` (balanced_protection) — Balances drawdown and return dynamically using a scaled utility model.
+- `buffered` (buffered_allocation) — Optimizes strategy blend first, then applies a cash buffer of up to 50%.
 
 ---
 

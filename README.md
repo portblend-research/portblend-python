@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 
-Official Python SDK and Command-Line Interface (`portblend`) for strategy return correlation matrix calculation, SLSQP portfolio weight optimization, and quantitative risk management.
+Official Python SDK and Command-Line Interface (`portblend`) for multi-series return correlation matrix calculation, constrained SLSQP weighting simulation, and quantitative drawdown analysis.
 
 ---
 
@@ -16,7 +16,7 @@ Official Python SDK and Command-Line Interface (`portblend`) for strategy return
 pip install portblend
 ```
 
-### Code Example: Compute Correlation Matrix & Optimize Portfolio Weights
+### Code Example: Compute Correlation Matrix & Calculate Series Weights
 ```python
 from portblend import PortBlendClient
 import pandas as pd
@@ -27,15 +27,15 @@ client = PortBlendClient(
     base_url="https://app.portblend.com/api"  # Or http://localhost:8000/api
 )
 
-# 2. Compute Pairwise Strategy Correlation Matrix
+# 2. Compute Pairwise Return Correlation Matrix
 # Accepts CSV, TSV, Excel file path, pandas.DataFrame, or raw CSV text string
-df_corr = client.correlate(data="path/to/strategy_navs.csv")
+df_corr = client.correlate(data="path/to/series_navs.csv")
 print("Pairwise Return Correlation Matrix:")
 print(df_corr)
 
-# 3. Optimize Portfolio Weights for Protection (min_drawdown)
+# 3. Compute Constrained Weights for Drawdown Protection (SLSQP)
 result = client.blend(
-    data="path/to/strategy_navs.csv",
+    data="path/to/series_navs.csv",
     target="protection",  # "protection" | "efficiency" | "recovery" | "stability" | "downside_safety" | "risk_balance" | "buffered"
     allow_cash=True       # Allow allocation to synthetic CASH buffer
 )
@@ -43,8 +43,8 @@ result = client.blend(
 # 4. Print Educational Quantitative Summary
 result.summary()
 
-# 5. Access Optimal Weights Dictionary
-print("Optimal Weights (%):", result.weights)
+# 5. Access Calculated Weights Dictionary
+print("Calculated Weights (%):", result.weights)
 ```
 
 ---
@@ -81,3 +81,7 @@ portblend optimize --file strategies.csv --target protection
 # Target Efficiency (max_sharpe) with 100% strategy allocation (no CASH)
 portblend optimize --file strategies.csv --target efficiency --no-cash
 ```
+
+---
+
+> **Scope**: PortBlend is an analytical calculation tool to study historical portfolio drawdowns and asset correlation. All charts and blend simulations are mathematical models based on data entered by the user, provided for educational and research purposes.
